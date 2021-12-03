@@ -6,7 +6,7 @@ use std::{
 
 fn main() -> Result<()> {
     // Reading file again
-    let file = File::open(Path::new("test.txt"))?;
+    let file = File::open(Path::new("input.txt"))?;
     let reader = BufReader::new(file);
     let mut input_array: Vec<String> = Vec::new();
     for line in reader.lines() {
@@ -16,10 +16,15 @@ fn main() -> Result<()> {
     let (oxygen_generator_rating, _) = find_max_min(input_array.clone(), MaxMin::Max, None);
     let (co2_scrubber_rating, _) = find_max_min(input_array.clone(), MaxMin::Min, None);
 
-    
+    let oxygen_generator_rating_decimal =
+        usize::from_str_radix(oxygen_generator_rating[0].as_str(), 2).unwrap();
+    let co2_scrubber_rating_decimal =
+        usize::from_str_radix(co2_scrubber_rating[0].as_str(), 2).unwrap();
 
-
-
+    println!(
+        "Result: {}",
+        oxygen_generator_rating_decimal * co2_scrubber_rating_decimal
+    );
 
     Ok(())
 }
