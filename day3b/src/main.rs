@@ -30,9 +30,9 @@ fn main() -> Result<()> {
 }
 
 // Need a recurisve function for it
-// takes an array as input, number you are intrested in either Max or Min
+// takes an array as input, number you are intrested in either Max or Min and the current iteration
 // loop through the array and store max and min occurence of 1 and 0 for that element
-// Then move max number in an array while min in another
+// Then move max/min number 
 // Keep doing it until number of element in both array is one
 // Return max min
 
