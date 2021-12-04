@@ -111,12 +111,14 @@ fn make_bingo_board_and_input(
 fn check_bingo(one_board: &Vec<Vec<(usize, bool)>>) -> bool {
     // horizontal
     // println!("Cehck Bingo");
+    let (mut loop_no_row, mut loop_no_column, mut main_loop) = (0, 0, 0);
     for i in 0..5 {
         for j in 0..5 {
             if one_board[i][j].1 == false {
                 break;
             } else if one_board[i][j].1 == true && j == 4 {
                 println!("Wining board Row: {:?}", one_board);
+                loop_no_row = loop_no_row + 1;
                 return true;
             }
         }
@@ -128,11 +130,16 @@ fn check_bingo(one_board: &Vec<Vec<(usize, bool)>>) -> bool {
                 break;
             } else if one_board[j][i].1 == true && j == 4 {
                 println!("Wining board Column: {:?}", one_board);
+                loop_no_column = loop_no_column + 1;
                 return true;
             }
         }
-     }
-    println!("Not true");
+    }
+    main_loop = main_loop + 1;
+    println!(
+        "mainLoop:{}, rowLoop:{}, colLoop:{}",
+        main_loop, loop_no_row, loop_no_column
+    );
     return false;
 }
 
