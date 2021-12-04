@@ -5,7 +5,9 @@ fn main() -> Result<()> {
                                                                // println!("{:?}", file.lines().next().unwrap());
                                                                // println!("{:?}", file.lines()[0]);
     let (bingo_input, bingo_boards) = make_bingo_board_and_input(&mut file.lines());
-    // println!("{:?}, {:?}", bingo_input, bingo_boards);
+
+    println!("Input: {:?}", bingo_input);
+    println!("Boards: {:?}", bingo_boards);
 
     Ok(())
 }
@@ -29,15 +31,36 @@ fn make_bingo_board_and_input(
 
     // for line in input.next() {
     //   println!("line :{}", line);
-    // }
+    // } println!("line :{}", line);
 
+    let mut single_board: Vec<Vec<(usize, bool)>> = Vec::new();
     loop {
-        let mut i = 0;
         let get_line = input.next();
-        println!("{:?}", get_line);
-        i = i + 1;
-        if i > 10 {
-            break;
+        match get_line {
+            Some(single_line) => {
+                if single_line.is_empty() {
+                    continue;
+                } else {
+                    if single_board.len() <= 4 {
+                        let get_single_board_one_line = single_line
+                            .trim()
+                            .split_ascii_whitespace()
+                            .map(|i| (i.parse::<usize>().unwrap(), false))
+                            .collect::<Vec<(usize, bool)>>();
+                        single_board.push(get_single_board_one_line);
+                    } else {
+                        bingo_boards.push(single_board);
+                        single_board = Vec::new();
+                        let get_single_board_one_line = single_line
+                            .trim()
+                            .split_ascii_whitespace()
+                            .map(|i| (i.parse::<usize>().unwrap(), false))
+                            .collect::<Vec<(usize, bool)>>();
+                        single_board.push(get_single_board_one_line);
+                    }
+                }
+            }
+            None => break,
         }
     }
 
@@ -45,3 +68,19 @@ fn make_bingo_board_and_input(
 
     (bingo_input, bingo_boards)
 }
+
+// [
+//     [
+//         [(22, false), (13, false), (17, false), (11, false), (0, false)],
+//         [(8, false), (2, false), (23, false), (4,false), (24, false)],
+//         [(21, false), (9, false), (14, false), (16, false), (7, false)],
+//         [(6, false), (10, false), (3, false), (18, false), (5, false)],
+//         [(1, false), (12, false), (20, false), (15, false), (19, false)]
+//     ], [
+//         [(3, false), (15,false), (0, false), (2, false), (22, false)],
+//         [(9, false), (18, false), (13, false), (17, false), (5, false)],
+//         [(19,false), (8, false), (7, false), (25, false), (23, false)],
+//         [(20, false), (11, false), (10, false), (24, false), (4, false)],
+//         [(14, false), (21, false), (16, false), (12, false), (6, false)]
+//     ]
+// ]
