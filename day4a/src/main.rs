@@ -2,8 +2,8 @@ use std::{fs::read_to_string, io::Result, path::Path};
 
 fn main() -> Result<()> {
     let file = read_to_string(Path::new("test.txt")).unwrap(); // can't find a way to get txt as string blob from bufreader
-                                                               // println!("{:?}", file.lines().next().unwrap());
-                                                               // println!("{:?}", file.lines()[0]);
+                                                                // println!("{:?}", file.lines().next().unwrap());
+                                                                // println!("{:?}", file.lines()[0]);
     let (bingo_input, bingo_boards) = make_bingo_board_and_input(&mut file.lines());
 
     println!("Input: {:?}", bingo_input);
@@ -36,27 +36,33 @@ fn make_bingo_board_and_input(
     let mut single_board: Vec<Vec<(usize, bool)>> = Vec::new();
     loop {
         let get_line = input.next();
+
+        // println!("{:?}", get_line);
+
         match get_line {
             Some(single_line) => {
                 if single_line.is_empty() {
                     continue;
                 } else {
-                    if single_board.len() <= 4 {
+                    if single_board.len() < 4 {
+                        // println!("single board: {:?}", single_board);
                         let get_single_board_one_line = single_line
                             .trim()
                             .split_ascii_whitespace()
                             .map(|i| (i.parse::<usize>().unwrap(), false))
                             .collect::<Vec<(usize, bool)>>();
                         single_board.push(get_single_board_one_line);
-                    } else {
+                    } else if single_board.len() == 4 {
+                        let get_single_board_one_line = single_line
+                            .trim()
+                            .split_ascii_whitespace()
+                            .map(|i| (i.parse::<usize>().unwrap(), false))
+                            .collect::<Vec<(usize, bool)>>();
+                        single_board.push(get_single_board_one_line);
                         bingo_boards.push(single_board);
                         single_board = Vec::new();
-                        let get_single_board_one_line = single_line
-                            .trim()
-                            .split_ascii_whitespace()
-                            .map(|i| (i.parse::<usize>().unwrap(), false))
-                            .collect::<Vec<(usize, bool)>>();
-                        single_board.push(get_single_board_one_line);
+                    } else {
+                        println!("Something strange happend 1");
                     }
                 }
             }
