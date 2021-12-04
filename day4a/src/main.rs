@@ -1,13 +1,30 @@
 use std::{fs::read_to_string, io::Result, path::Path};
 
 fn main() -> Result<()> {
+    let board_size = 5;
     let file = read_to_string(Path::new("test.txt")).unwrap(); // can't find a way to get txt as string blob from bufreader
-                                                                // println!("{:?}", file.lines().next().unwrap());
-                                                                // println!("{:?}", file.lines()[0]);
+                                                               // println!("{:?}", file.lines().next().unwrap());
+                                                               // println!("{:?}", file.lines()[0]);
     let (bingo_input, bingo_boards) = make_bingo_board_and_input(&mut file.lines());
 
-    println!("Input: {:?}", bingo_input);
-    println!("Boards: {:?}", bingo_boards);
+    // println!("Input: {:?}", bingo_input);
+
+    for num_to_mark in bingo_input {
+        for single_board in bingo_boards.clone() {
+            for single_board_row in single_board.clone().iter_mut() {
+                for single_input in single_board_row.iter_mut() {
+                    if check_bingo(&single_board, board_size) {
+                        println!("{:?}", single_board);
+                        break;
+                    } else {
+                        if single_input.0 == num_to_mark {
+                            single_input.1 = true;
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     Ok(())
 }
@@ -73,6 +90,31 @@ fn make_bingo_board_and_input(
     // println!("{:?}", input);
 
     (bingo_input, bingo_boards)
+}
+
+fn check_bingo(one_board: &Vec<Vec<(usize, bool)>>, board_size: usize) -> bool {
+    // horizontal
+    for i in 0..board_size {
+        for j in 0..board_size {
+            if one_board[i][j].1 == false {
+                break;
+            } else if one_board[i][j].1 == true && j == board_size {
+                return true;
+            }
+        }
+    }
+    // vertical
+    for i in 0..board_size {
+        for j in 0..board_size {
+            if one_board[j][i].1 == false {
+                break;
+            } else if one_board[j][i].1 == true && i == board_size {
+                return true;
+            }
+        }
+    }
+
+    false
 }
 
 // [
