@@ -1,21 +1,24 @@
 use std::{fs::read_to_string, path::Path};
 
 fn main() {
-    let file = read_to_string(Path::new("test.txt")).unwrap();
-    // let file = read_to_string(Path::new("input.txt")).unwrap();
+    // let file = read_to_string(Path::new("test.txt")).unwrap();
+    let file = read_to_string(Path::new("input.txt")).unwrap();
 
-    let mut new_board: Vec<Vec<usize>> = vec![vec![0; 10]; 10]; //10 by 10
-                                                                // let mut new_board: Vec<Vec<usize>> = vec![vec![0; 1000]; 1000]; //1000 by 1000
+    // let mut new_board: Vec<Vec<usize>> = vec![vec![0; 10]; 10]; //10 by 10
+    let mut new_board: Vec<Vec<usize>> = vec![vec![0; 1000]; 1000]; //1000 by 1000
 
     // println!("{:?}", nine_by_nine);
 
     let parsed_input = parse_input(&mut file.lines());
 
     make_board(&parsed_input, &mut new_board);
-    println!("Board: {:?}", new_board);
+
+    let result = calculate_result(&new_board);
+    // println!("Board: {:?}", new_board);
 
     // println!("Parsed Input: {:?}", parsed_input);
     // println!("Grid: {:?}", nine_by_nine);
+    println!("Result: {}", result);
 }
 
 fn make_board(input: &Vec<Vec<usize>>, board: &mut Vec<Vec<usize>>) {
@@ -44,12 +47,14 @@ fn make_board(input: &Vec<Vec<usize>>, board: &mut Vec<Vec<usize>>) {
             // println!("x1 is equal to x2 in iter: {}", i);
         } else if y1 == y2 {
             if x1 > x2 {
-                for l in x2..x1 + 1 { // +1 to include x1
+                for l in x2..x1 + 1 {
+                    // +1 to include x1
                     board[y1][l] = board[y1][l] + 1;
                     // println!("Changed board x1>x2");
                 }
             } else if x1 < x2 {
-                for l in x1..x2 { // +1 to include x2
+                for l in x1..x2 + 1 {
+                    // +1 to include x2
                     board[y1][l] = board[y1][l] + 1;
                     // println!("Changed board x1<x2");
                 }
@@ -57,6 +62,8 @@ fn make_board(input: &Vec<Vec<usize>>, board: &mut Vec<Vec<usize>>) {
                 board[x1][y1] = board[x1][y1] + 1;
                 // println!("Changed board x1=x2");
             }
+            // println!("y1 is equal to y2 in iter: {}", i);
+            // println!("{:?}", board)
         } else {
             continue;
         }
@@ -103,3 +110,27 @@ fn parse_input(input: &mut std::str::Lines<'_>) -> Vec<Vec<usize>> {
     }
     output
 }
+
+fn calculate_result(input: &Vec<Vec<usize>>) -> usize {
+    let mut result = 0;
+
+    for i in 0..input.len() {
+        for j in 0..input[i].len() {
+            if input[i][j] >= 2 {
+                result = result + 1;
+            }
+        }
+    }
+
+    result
+}
+// 0 0 0 0 0 0 0 1 0 0
+// 0 0 1 0 0 0 0 1 0 0
+// 0 0 1 0 0 0 0 1 0 0
+// 0 0 0 0 0 0 0 1 0 0
+// 0 1 1 2 1 1 1 2 1 1
+// 0 0 0 0 0 0 0 0 0 0
+// 0 0 0 0 0 0 0 0 0 0
+// 0 0 0 0 0 0 0 0 0 0
+// 0 0 0 0 0 0 0 0 0 0
+// 2 2 1 1 1 0 0 0 0 0
