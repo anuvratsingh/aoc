@@ -25,37 +25,37 @@ fn make_board(input: &Vec<Vec<usize>>, board: &mut Vec<Vec<usize>>) {
             if y1 > y2 {
                 for l in y2..y1 + 1 {
                     // +1 to include y1
-                    board[x1][l] = board[x1][l] + 1;
-                    println!("Changed board y1>y2");
+                    board[l][x1] = board[l][x1] + 1;
+                    // println!("Changed board y1>y2");
                 }
                 // println!("y1:{} is greater than y2:{}", y1, y2)
             } else if y1 < y2 {
                 for l in y1..y2 + 1 {
                     // +1 to include y2
-                    board[x1][l] = board[x1][l] + 1;
-                    println!("Changed board y1<y2");
+                    board[l][x1] = board[l][x1] + 1;
+                    // println!("Changed board y1<y2");
                 }
                 // println!("y1:{} is less than y2:{}", y1, y2)
             } else if y1 == y2 {
                 board[x1][y1] = board[x1][y1] + 1;
-                println!("Changed board y1=y2");
+                // println!("Changed board y1=y2");
                 // println!("y1:{} is equal to y2:{}", y1, y2)
             }
             // println!("x1 is equal to x2 in iter: {}", i);
         } else if y1 == y2 {
             if x1 > x2 {
                 for l in x2..x1 + 1 { // +1 to include x1
-                    board[l][y1] = board[l][y1] + 1;
-                    println!("Changed board x1>x2");
+                    board[y1][l] = board[y1][l] + 1;
+                    // println!("Changed board x1>x2");
                 }
             } else if x1 < x2 {
                 for l in x1..x2 { // +1 to include x2
-                    board[l][y1] = board[l][y1] + 1;
-                    println!("Changed board x1<x2");
+                    board[y1][l] = board[y1][l] + 1;
+                    // println!("Changed board x1<x2");
                 }
             } else if x1 == x2 {
                 board[x1][y1] = board[x1][y1] + 1;
-                println!("Changed board x1=x2");
+                // println!("Changed board x1=x2");
             }
         } else {
             continue;
