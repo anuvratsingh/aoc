@@ -18,9 +18,11 @@ fn main() {
 fn new_new_reproducer(input: Vec<Vec<usize>>, cycles: usize) -> Vec<Vec<usize>> {
     let mut output = input.clone();
 
-    for l in 0..cycles {
-        for i in output {
-            println!("i:{}", i)
+    for _ in 0..cycles {
+        for i in &mut output {
+            if i[1] > 0 {
+                i
+            } 
         }
     }
     output
