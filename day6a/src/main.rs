@@ -4,7 +4,7 @@ fn main() {
     let file = read_to_string(Path::new("test.txt")).unwrap();
     // let file = read_to_string(Path::new("input.txt")).unwrap();
 
-    let duration = 256;
+    let duration = 80;
 
     let mut parsed_input = parse_input(&mut file.lines());
 
