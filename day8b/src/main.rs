@@ -49,8 +49,7 @@ fn count_all(input: &Vec<Vec<Vec<String>>>) -> Vec<Vec<usize>> {
         // println!("Input: {:?}", input_clone[i][0]);
         // mark positions
         for j in &input_clone[i][0] {
-            let mut char_array: Vec<char> = j.chars().collect();
-            char_array.sort();
+            let char_array: Vec<char> = j.chars().collect();
 
             if char_array.len() == 2 && temp_positiions[2].0 == 'x' && temp_positiions[5].0 == 'x' {
                 temp_positiions[2].0 = char_array[0];
@@ -74,26 +73,41 @@ fn count_all(input: &Vec<Vec<Vec<String>>>) -> Vec<Vec<usize>> {
                     }
                 }
             }
-            if char_array.len() == 7 && temp_positiions[4].0 == 'x' && temp_positiions[6].0 == 'x' {
+            if char_array.len() == 5 && temp_positiions[6].0 == 'x' {
+                if char_array.contains(&temp_positiions[0].0)
+                    && char_array.contains(&temp_positiions[1].0)
+                    && char_array.contains(&temp_positiions[3].0)
+                    && char_array.contains(&temp_positiions[5].0)
+                {
+                    for z in &char_array {
+                        if temp_positiions[0].0 != *z
+                            && temp_positiions[1].0 != *z
+                            && temp_positiions[3].0 != *z
+                            && temp_positiions[5].0 != *z
+                        {
+                            temp_positiions[6].0 = *z
+                        }
+                    }
+                }
+            }
+
+            if char_array.len() == 7 && temp_positiions[4].0 == 'x' {
                 for z in &char_array {
                     if temp_positiions[0].0 != *z
                         && temp_positiions[1].0 != *z
                         && temp_positiions[2].0 != *z
                         && temp_positiions[3].0 != *z
                         && temp_positiions[5].0 != *z
+                        && temp_positiions[6].0 != *z
                     {
-                        if temp_positiions[4].0 == 'x' {
-                            temp_positiions[4].0 = *z;
-                        } else if temp_positiions[6].0 == 'x' {
-                            temp_positiions[6].0 = *z;
-                        }
+                        temp_positiions[4].0 = *z;
                     }
                 }
             }
             // println!("J :{}", j);
         }
         // find num
-        // println!("Temp post : {:?}", temp_positiions);
+        
         let mut four_digit: Vec<usize> = Vec::new();
         for j in &input_clone[i][1] {
             let array_char: Vec<char> = j.chars().collect();
@@ -148,6 +162,7 @@ fn count_all(input: &Vec<Vec<Vec<String>>>) -> Vec<Vec<usize>> {
             }
         }
     }
+    println!("Temp post : {:?}", temp_positiions);
     temp_positiions = vec![
         ('x', 0),
         ('x', 1),
