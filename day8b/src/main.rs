@@ -1,9 +1,9 @@
 use std::{fs::read_to_string, path::Path};
 
 fn main() {
-    // let file = read_to_string(Path::new("test.txt")).unwrap();
+    let file = read_to_string(Path::new("test.txt")).unwrap();
     // let file = read_to_string(Path::new("input.txt")).unwrap();
-    let file = read_to_string(Path::new("single_test.txt")).unwrap();
+    // let file = read_to_string(Path::new("single_test.txt")).unwrap();
 
     let parsed_input = parse_input(&mut file.lines());
 
@@ -11,6 +11,22 @@ fn main() {
     let all = count_all(&parsed_input);
 
     println!("All :{:?}", all);
+    let mut result = 0;
+    for mut i in all {
+        let mut _temp_string = 0;
+        i.reverse();
+        let base: i32 = 10;
+        for j in 0..i.len() {
+            if j == 0 {
+                _temp_string = _temp_string + i[0];
+            } else {
+                _temp_string = _temp_string + (i[j] * base.pow(j as u32) as usize);
+            }
+        }
+        result = result + _temp_string;
+        _temp_string = 0;
+    }
+    println!("Result, {}", result);
     // println!("Uniques: {}", uniques);
     // println!("Parsed Input: {:?}", parsed_input);
 }
@@ -30,111 +46,54 @@ fn count_all(input: &Vec<Vec<Vec<String>>>) -> Vec<Vec<usize>> {
     for i in 0..input_clone.len() {
         input_clone[i][0].sort_by(|a, b| a.len().partial_cmp(&b.len()).unwrap());
 
-        println!("Input: {:?}", input_clone[i][0]);
+        // println!("Input: {:?}", input_clone[i][0]);
         // mark positions
         for j in &input_clone[i][0] {
-            if j.len() == 2 {
-                let chars_two: Vec<char> = j.chars().collect();
-                if temp_positiions[2].0 == 'x' && temp_positiions[5].0 == 'x' {
-                    temp_positiions[2].0 = chars_two[0];
-                    temp_positiions[5].0 = chars_two[1];
-                }
-                // println!("{:?}", chars[0]);
-            } else if j.len() == 3 {
-                let chars_three: Vec<char> = j.chars().collect();
-                let (pos_2, pos_5) = (temp_positiions[2].0, temp_positiions[5].0);
+            let mut char_array: Vec<char> = j.chars().collect();
+            char_array.sort();
 
-                for i in chars_three {
-                    if i == pos_2 || i == pos_5 {
-                        continue;
-                    } else if temp_positiions[0].0 == 'x' {
-                        temp_positiions[0].0 = i
-                    }
-                }
-                // println!("Positions: {:?}", temp_positiions);
-            } else if j.len() == 4 {
-                let chars_four: Vec<char> = j.chars().collect();
-                let (pos_2, pos_5) = (temp_positiions[2].0, temp_positiions[5].0);
-                for i in chars_four {
-                    if i == pos_2 || i == pos_5 {
-                        continue;
-                    } else if temp_positiions[1].0 == 'x' {
-                        // println!("Here in 1 with char : {}", i);
-                        temp_positiions[1].0 = i;
-                    } else if temp_positiions[3].0 == 'x' {
-                        // println!("Here in 3 with char : {}", i);
-                        temp_positiions[3].0 = i;
-                    }
-                }
-                // println!("Chars : {:?}", chars);
-                // println!("Positions: {:?}", temp_positiions);
-            } else if j.len() == 5 {
-                let chars_five: Vec<char> = j.chars().collect();
-                let (pos_0, pos_2, pos_3, pos_5, pos_6) = (
-                    temp_positiions[0].0,
-                    temp_positiions[2].0,
-                    temp_positiions[3].0,
-                    temp_positiions[5].0,
-                    temp_positiions[6].0,
-                );
-
-                for i in chars_five {
-                    // changing from 5 to 3
-                    if i == pos_0 || i == pos_2 || i == pos_3 || i == pos_5 || i == pos_6 {
-                        continue;
-                    } else if temp_positiions[0].0 == 'x' {
-                        temp_positiions[0].0 = i;
-                    } else if temp_positiions[2].0 == 'x' {
-                        temp_positiions[1].0 = i;
-                    } else if temp_positiions[3].0 == 'x' {
-                        temp_positiions[3].0 = i;
-                    } else if temp_positiions[5].0 == 'x' {
-                        temp_positiions[5].0 = i;
-                    } else if temp_positiions[6].0 == 'x' {
-                        temp_positiions[6].0 = i;
-                    }
-                }
-            } else if j.len() == 7 {
-                let chars_seven: Vec<char> = j.chars().collect();
-                let (pos_0, pos_1, pos_2, pos_3, pos_5, pos_6) = (
-                    temp_positiions[0].0,
-                    temp_positiions[1].0,
-                    temp_positiions[2].0,
-                    temp_positiions[3].0,
-                    temp_positiions[5].0,
-                    temp_positiions[6].0,
-                );
-                for i in chars_seven {
-                    if i == pos_0
-                        || i == pos_1
-                        || i == pos_2
-                        || i == pos_3
-                        || i == pos_5
-                        || i == pos_6
-                    {
-                        continue;
-                    } else if temp_positiions[0].0 == 'x' {
-                        temp_positiions[0].0 = i;
-                    } else if temp_positiions[1].0 == 'x' {
-                        temp_positiions[1].0 = i;
-                    } else if temp_positiions[2].0 == 'x' {
-                        temp_positiions[2].0 = i;
-                    } else if temp_positiions[3].0 == 'x' {
-                        temp_positiions[3].0 = i;
-                    } else if temp_positiions[4].0 == 'x' {
-                        temp_positiions[4].0 = i;
-                    } else if temp_positiions[5].0 == 'x' {
-                        temp_positiions[5].0 = i;
-                    } else if temp_positiions[6].0 == 'x' {
-                        temp_positiions[6].0 = i;
-                    }
-                }
-                println!("Positions: {:?}", temp_positiions);
+            if char_array.len() == 2 && temp_positiions[2].0 == 'x' && temp_positiions[5].0 == 'x' {
+                temp_positiions[2].0 = char_array[0];
+                temp_positiions[5].0 = char_array[1];
             }
+            if char_array.len() == 3 && temp_positiions[0].0 == 'x' {
+                for z in &char_array {
+                    if temp_positiions[2].0 != *z && temp_positiions[5].0 != *z {
+                        temp_positiions[0].0 = *z;
+                    }
+                }
+            }
+            if char_array.len() == 4 && temp_positiions[1].0 == 'x' && temp_positiions[3].0 == 'x' {
+                for z in &char_array {
+                    if temp_positiions[2].0 != *z && temp_positiions[5].0 != *z {
+                        if temp_positiions[1].0 == 'x' {
+                            temp_positiions[1].0 = *z;
+                        } else if temp_positiions[3].0 == 'x' {
+                            temp_positiions[3].0 = *z;
+                        }
+                    }
+                }
+            }
+            if char_array.len() == 7 && temp_positiions[4].0 == 'x' && temp_positiions[6].0 == 'x' {
+                for z in &char_array {
+                    if temp_positiions[0].0 != *z
+                        && temp_positiions[1].0 != *z
+                        && temp_positiions[2].0 != *z
+                        && temp_positiions[3].0 != *z
+                        && temp_positiions[5].0 != *z
+                    {
+                        if temp_positiions[4].0 == 'x' {
+                            temp_positiions[4].0 = *z;
+                        } else if temp_positiions[6].0 == 'x' {
+                            temp_positiions[6].0 = *z;
+                        }
+                    }
+                }
+            }
+            // println!("J :{}", j);
         }
-
         // find num
-        println!("Temp post : {:?}", temp_positiions);
+        // println!("Temp post : {:?}", temp_positiions);
         let mut four_digit: Vec<usize> = Vec::new();
         for j in &input_clone[i][1] {
             let array_char: Vec<char> = j.chars().collect();
@@ -181,7 +140,7 @@ fn count_all(input: &Vec<Vec<Vec<String>>>) -> Vec<Vec<usize>> {
 
                     if four_digit.len() == 4 {
                         // pushing four digit
-                        println!("Four digit len is 4 :{:?}", four_digit);
+                        // println!("Four digit len is 4 :{:?}", four_digit);
                         output.push(four_digit);
                         four_digit = Vec::new();
                     }
