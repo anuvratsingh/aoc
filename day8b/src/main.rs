@@ -32,146 +32,112 @@ fn main() {
 }
 fn count_all(input: &Vec<Vec<Vec<String>>>) -> Vec<Vec<usize>> {
     let mut output: Vec<Vec<usize>> = Vec::new();
-    let mut input_clone = input.clone();
+    let input_clone = input.clone();
 
-    let mut temp_positiions: Vec<(char, usize)> = vec![
-        ('x', 0),
-        ('x', 1),
-        ('x', 2),
-        ('x', 3),
-        ('x', 4),
-        ('x', 5),
-        ('x', 6),
-    ];
+    // finding positions
     for i in 0..input_clone.len() {
-        input_clone[i][0].sort_by(|a, b| a.len().partial_cmp(&b.len()).unwrap());
-
-        // println!("Input: {:?}", input_clone[i][0]);
-        // mark positions
+        let mut temp_four_digit: Vec<usize> = Vec::new();
+        let mut temp_positiions: Vec<String> = vec![String::new(); 10];
         for j in &input_clone[i][0] {
-            let char_array: Vec<char> = j.chars().collect();
-
-            if char_array.len() == 2 && temp_positiions[2].0 == 'x' && temp_positiions[5].0 == 'x' {
-                temp_positiions[2].0 = char_array[0];
-                temp_positiions[5].0 = char_array[1];
+            if j.len() == 2 {
+                temp_positiions[1] = j.to_string();
             }
-            if char_array.len() == 3 && temp_positiions[0].0 == 'x' {
-                for z in &char_array {
-                    if temp_positiions[2].0 != *z && temp_positiions[5].0 != *z {
-                        temp_positiions[0].0 = *z;
-                    }
-                }
+            if j.len() == 3 {
+                temp_positiions[7] = j.to_string();
             }
-            if char_array.len() == 4 && temp_positiions[1].0 == 'x' && temp_positiions[3].0 == 'x' {
-                for z in &char_array {
-                    if temp_positiions[2].0 != *z && temp_positiions[5].0 != *z {
-                        if temp_positiions[1].0 == 'x' {
-                            temp_positiions[1].0 = *z;
-                        } else if temp_positiions[3].0 == 'x' {
-                            temp_positiions[3].0 = *z;
-                        }
-                    }
-                }
+            if j.len() == 4 {
+                temp_positiions[4] = j.to_string();
             }
-            if char_array.len() == 5 && temp_positiions[6].0 == 'x' {
-                if char_array.contains(&temp_positiions[0].0)
-                    && char_array.contains(&temp_positiions[1].0)
-                    && char_array.contains(&temp_positiions[3].0)
-                    && char_array.contains(&temp_positiions[5].0)
-                {
-                    for z in &char_array {
-                        if temp_positiions[0].0 != *z
-                            && temp_positiions[1].0 != *z
-                            && temp_positiions[3].0 != *z
-                            && temp_positiions[5].0 != *z
-                        {
-                            temp_positiions[6].0 = *z
-                        }
-                    }
-                }
+            if j.len() == 7 {
+                temp_positiions[8] = j.to_string();
             }
-
-            if char_array.len() == 7 && temp_positiions[4].0 == 'x' {
-                for z in &char_array {
-                    if temp_positiions[0].0 != *z
-                        && temp_positiions[1].0 != *z
-                        && temp_positiions[2].0 != *z
-                        && temp_positiions[3].0 != *z
-                        && temp_positiions[5].0 != *z
-                        && temp_positiions[6].0 != *z
-                    {
-                        temp_positiions[4].0 = *z;
-                    }
-                }
+            if j.len() == 5 && temp_positiions[1].chars().all(|f| j.contains(f)) {
+                temp_positiions[3] = j.to_string();
             }
-            // println!("J :{}", j);
+            if j.len() == 6
+                && temp_positiions[4].chars().all(|f| j.contains(f))
+                && temp_positiions[7].chars().all(|f| j.contains(f))
+            {
+                temp_positiions[9] = j.to_string();
+            }
+            if j.len() == 5 && !j.chars().all(|f| temp_positiions[9].contains(f)) {
+                temp_positiions[2] = j.to_string();
+            }
+            if j.len() == 5 {
+                temp_positiions[5] = j.to_string();
+            }
+            if j.len() == 6
+                && j != &temp_positiions[9]
+                && temp_positiions[5].chars().all(|f| j.contains(f))
+            {
+                temp_positiions[6] = j.to_string();
+            }
+            if j.len() == 6 {
+                temp_positiions[0] = j.to_string();
+            }
         }
-        // find num
+        println!("Temp pos: {:?}", temp_positiions);
+        // check output
         
-        let mut four_digit: Vec<usize> = Vec::new();
-        for j in &input_clone[i][1] {
-            let array_char: Vec<char> = j.chars().collect();
-
-            // println!("Array Char: {:?}", array_char);
-
-            for ij in 0..temp_positiions.len() {
-                if temp_positiions[ij].0 != 'x' && ij == temp_positiions.len() - 1 {
-                    // println!("Here");
-                    if array_char.len() == 2 {
-                        four_digit.push(1);
-                    }
-                    if array_char.len() == 3 {
-                        four_digit.push(7)
-                    }
-                    if array_char.len() == 4 {
-                        four_digit.push(4);
-                    }
-                    if array_char.len() == 5 {
-                        if array_char.contains(&temp_positiions[1].0) {
-                            four_digit.push(5);
-                        } else if array_char.contains(&temp_positiions[4].0) {
-                            four_digit.push(2)
-                        } else if array_char.contains(&temp_positiions[5].0) {
-                            four_digit.push(3)
-                        }
-                    }
-                    if array_char.len() == 6 {
-                        if !array_char.contains(&temp_positiions[3].0) {
-                            four_digit.push(0)
-                        }
-                        if !array_char.contains(&temp_positiions[2].0) {
-                            four_digit.push(6)
-                        }
-                        if !array_char.contains(&temp_positiions[4].0) {
-                            four_digit.push(9)
-                        }
-                    }
-                    if array_char.len() == 7 {
-                        four_digit.push(8);
-                    }
-
-                    // println!("four digit: {:?}", four_digit);
-
-                    if four_digit.len() == 4 {
-                        // pushing four digit
-                        // println!("Four digit len is 4 :{:?}", four_digit);
-                        output.push(four_digit);
-                        four_digit = Vec::new();
-                    }
-                }
-            }
+        // for k in &input_clone[i][1] {
+        //     println!("k: {:?}", k);
+        //     if k.chars().all(|f| temp_positiions[0].contains(f)) {
+        //         if temp_four_digit.len() < 4 {
+        //             temp_four_digit.push(0);
+        //         }
+        //     }
+        //     if k.chars().all(|f| temp_positiions[1].contains(f)) {
+        //         if temp_four_digit.len() < 4 {
+        //             temp_four_digit.push(1);
+        //         }
+        //     }
+        //     if k.chars().all(|f| temp_positiions[2].contains(f)) {
+        //         if temp_four_digit.len() < 4 {
+        //             temp_four_digit.push(2);
+        //         }
+        //     }
+        //     if k.chars().all(|f| temp_positiions[3].contains(f)) {
+        //         if temp_four_digit.len() < 4 {
+        //             temp_four_digit.push(3);
+        //         }
+        //     }
+        //     if k.chars().all(|f| temp_positiions[4].contains(f)) {
+        //         if temp_four_digit.len() < 4 {
+        //             temp_four_digit.push(4);
+        //         }
+        //     }
+        //     if k.chars().all(|f| temp_positiions[5].contains(f)) {
+        //         if temp_four_digit.len() < 4 {
+        //             temp_four_digit.push(5);
+        //         }
+        //     }
+        //     if k.chars().all(|f| temp_positiions[6].contains(f)) {
+        //         if temp_four_digit.len() < 4 {
+        //             temp_four_digit.push(6);
+        //         }
+        //     }
+        //     if k.chars().all(|f| temp_positiions[7].contains(f)) {
+        //         if temp_four_digit.len() < 4 {
+        //             temp_four_digit.push(7);
+        //         }
+        //     }
+        //     if k.chars().all(|f| temp_positiions[8].contains(f)) {
+        //         if temp_four_digit.len() < 4 {
+        //             temp_four_digit.push(8);
+        //         }
+        //     }
+        //     if k.chars().all(|f| temp_positiions[9].contains(f)) {
+        //         if temp_four_digit.len() < 4 {
+        //             temp_four_digit.push(9);
+        //         }
+        //     }
+        // }
+        
+        if temp_four_digit.len() == 4 {
+            output.push(temp_four_digit);
+            temp_four_digit = Vec::new();
         }
     }
-    println!("Temp post : {:?}", temp_positiions);
-    temp_positiions = vec![
-        ('x', 0),
-        ('x', 1),
-        ('x', 2),
-        ('x', 3),
-        ('x', 4),
-        ('x', 5),
-        ('x', 6),
-    ];
     // println!("output: {:?}", output);
     output
 }
